@@ -17,17 +17,17 @@
         const phaseBtn = document.getElementById('phaseBtn');
         const rulePre = document.getElementById('rulePre');
 
-        const DEFAULT_RULE_CHANCE = 0.2;
-        let ruleChance = DEFAULT_RULE_CHANCE;
+        const RESET_RULE_CHANCE = 0.05;
+        let ruleChance = 0.2;
         let phaseIndex = 0;
 
         const phaseToChance = Object.freeze({
-            draw: 0.1,
-            standby: 0.05,
-            main1: 0.2,
-            battle: 0.2,
-            main2: 0.2,
-            end: 0.1,
+            draw:       chanceRange(0.10, 0.01),
+            standby:    chanceRange(0.05, 0.01),
+            main1:      chanceRange(0.20, 0.01),
+            battle:     chanceRange(0.20, 0.01),
+            main2:      chanceRange(0.20, 0.01),
+            end:        chanceRange(0.10, 0.01),
         });
 
         const rules = [
@@ -41,19 +41,32 @@
             'set'
         ];
 
+        /**
+         * Takes a probability from 0-1 and gives probabilities in the range [chance - plusMinus, change + plusMinus]
+         * 
+         * @param {number} chance - probability from 0 to 1
+         * @param {number} plusMinus - addend and subtrahend for range calculation
+         * @returns {number} a random number in the range [chance - plusMinus, change + plusMinus]
+         */
+        function chanceRange(chance, plusMinus) {
+            const randomRange = 2 * plusMinus;
+            return chance + ((Math.random() * randomRange) - plusMinus);
+        }
+
         function getRule() {
             const ptcKeys = Object.keys(phaseToChance);
             ruleChance += phaseToChance[ptcKeys[phaseIndex % ptcKeys.length]];
 
             if (Math.random() < ruleChance) {
                 rulePre.innerText = rules[Math.floor(Math.random() * rules.length)];
-                ruleChance = DEFAULT_RULE_CHANCE;
+                ruleChance = RESET_RULE_CHANCE;
             } else {
                 rulePre.innerText = '';
             }
         }
 
         phaseBtn.addEventListener('click', getRule);
+
     </script>
 </body>
 
