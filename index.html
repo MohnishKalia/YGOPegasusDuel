@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pegasus Duel</title>
+</head>
+
+<body>
+    <h1>Pegasus Duel Generator</h1>
+    <button id="phaseBtn">Phase Change</button>
+    <pre id="rulePre"></pre>
+
+    <script>
+        const phaseBtn = document.getElementById('phaseBtn');
+        const rulePre = document.getElementById('rulePre');
+
+        const DEFAULT_RULE_CHANCE = 0.2;
+        let ruleChance = DEFAULT_RULE_CHANCE;
+        let phaseIndex = 0;
+
+        const phaseToChance = Object.freeze({
+            draw: 0.1,
+            standby: 0.05,
+            main1: 0.2,
+            battle: 0.2,
+            main2: 0.2,
+            end: 0.1,
+        });
+
+        const rules = [
+            'delete',
+            'this',
+            'card',
+            'if',
+            'one of the',
+            'monsters',
+            'are',
+            'set'
+        ];
+
+        function getRule() {
+            const ptcKeys = Object.keys(phaseToChance);
+            ruleChance += phaseToChance[ptcKeys[phaseIndex % ptcKeys.length]];
+
+            if (Math.random() < ruleChance) {
+                rulePre.innerText = rules[Math.floor(Math.random() * rules.length)];
+                ruleChance = DEFAULT_RULE_CHANCE;
+            } else {
+                rulePre.innerText = '';
+            }
+        }
+
+        phaseBtn.addEventListener('click', getRule);
+    </script>
+</body>
+
+</html>
