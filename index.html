@@ -30,16 +30,17 @@
             end:        chanceRange(0.10, 0.01),
         });
 
-        const rules = [
-            'delete',
-            'this',
-            'card',
-            'if',
-            'one of the',
-            'monsters',
-            'are',
-            'set'
-        ];
+        let rules;
+
+        async function getRules() {
+            const res = await fetch('./rules.txt');
+            const content = await res.text();
+            rules = content.split('\n')
+                           .map(line => line.trim())
+                           .filter(line => line.trim());
+        }
+
+        getRules();
 
         /**
          * Takes a probability from 0-1 and gives probabilities in the range [chance - plusMinus, change + plusMinus]
@@ -56,9 +57,10 @@
         function getRule() {
             const ptcKeys = Object.keys(phaseToChance);
             ruleChance += phaseToChance[ptcKeys[phaseIndex % ptcKeys.length]];
-
+            
             if (Math.random() < ruleChance) {
-                rulePre.innerText = rules[Math.floor(Math.random() * rules.length)];
+                if (rules)
+                    rulePre.innerText = rules[Math.floor(Math.random() * rules.length)];
                 ruleChance = RESET_RULE_CHANCE;
             } else {
                 rulePre.innerText = '';
@@ -66,7 +68,6 @@
         }
 
         phaseBtn.addEventListener('click', getRule);
-
     </script>
 </body>
 

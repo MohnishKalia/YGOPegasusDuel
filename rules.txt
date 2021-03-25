@@ -1,0 +1,10 @@
+Till the end of this turn, all monster effects are negated
+Till the end of this turn, all battle damage is halved and all effect damage is doubled
+It is now the end phase
+Both players draw 3 cards and discard 2 cards
+Both players can special summon one monster from the extra deck ignoring its summoning conditions
+Average out both players' life points
+Keep the game state, it is now the draw phase
+Reveal all facedown cards
+Both players show one card from their hands to their opponent
+No monsters can be destroyed this turn
