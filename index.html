@@ -6,16 +6,106 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pegasus Duel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+        /* http://meyerweb.com/eric/tools/css/reset/ 
+        v2.0 | 20110126
+        License: none (public domain)
+        */
+
+        html, body, div, span, applet, object, iframe,
+        h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed, 
+        figure, figcaption, footer, header, hgroup, 
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure, 
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+            line-height: 1;
+        }
+        ol, ul {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        /*//////////////////*/
+        /* BEGIN CUSTOM CSS */
+        /*//////////////////*/
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        button {
+            background-color: black;
+            font-family: 'Nunito', sans-serif;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #phaseBtn, hr {
+            margin: 1.5rem;
+        }
+
+        #phaseP {
+            text-transform: capitalize;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Pegasus Duel Generator</h1>
-    <button id="phaseBtn">Phase Change</button>
-    <pre id="rulePre"></pre>
+    <div class="container">
+        <h1>Pegasus Duel Generator</h1>
+        <button id="phaseBtn">Phase Change</button>
+        <p id="ruleP"><i>Rule</i></p>
+        <hr>
+        <p id="phaseP">Phase</p>
+    </div>
 
     <script>
         const phaseBtn = document.getElementById('phaseBtn');
-        const rulePre = document.getElementById('rulePre');
+        const ruleP = document.getElementById('ruleP');
+        const phaseP = document.getElementById('phaseP');
 
         const RESET_RULE_CHANCE = 0.05;
         let ruleChance = 0.2;
@@ -56,15 +146,19 @@
 
         function getRule() {
             const ptcKeys = Object.keys(phaseToChance);
-            ruleChance += phaseToChance[ptcKeys[phaseIndex % ptcKeys.length]];
+            console.log({phaseIndex,ptcKeys})
+            const currentPhase = ptcKeys[phaseIndex % ptcKeys.length];
+            phaseP.textContent = currentPhase;
+            ruleChance += phaseToChance[currentPhase];
             
             if (Math.random() < ruleChance) {
                 if (rules)
-                    rulePre.innerText = rules[Math.floor(Math.random() * rules.length)];
+                    ruleP.innerText = rules[Math.floor(Math.random() * rules.length)];
                 ruleChance = RESET_RULE_CHANCE;
             } else {
-                rulePre.innerText = '';
+                ruleP.innerText = '';
             }
+            phaseIndex++;
         }
 
         phaseBtn.addEventListener('click', getRule);
